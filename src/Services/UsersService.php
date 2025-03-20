@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 
-class UsersService
+class UsersService implements UsersServiceInterface
 {
     private User $user;
 

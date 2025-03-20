@@ -9,14 +9,15 @@ use Psr\Container\NotFoundExceptionInterface;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Uru\SlimApiController\ApiController;
+use App\Services\UsersServiceInterface;
 
 class BaseController extends ApiController
 {
-    private ContainerInterface $container;
+    private UsersServiceInterface $usersService;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(UsersServiceInterface $usersService)
     {
-        $this->container = $container;
+        $this->usersService = $usersService;
     }
 
     public function index(Response $response): Response
@@ -32,9 +33,7 @@ class BaseController extends ApiController
      */
     public function getUser(int $id, Request $request, Response $response): Response
     {
-        /** @var UsersService $usersService */
-        $usersService = $this->container->has('UsersService') ? $this->container->get('UsersService') : null;
-        $user = $usersService->createUser($id)->getUser();
+        $user = $this->usersService->createUser($id)->getUser();
 
         return $this->withJson($request, $response, [
             'id' => $user->getId(),
